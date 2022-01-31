@@ -1,0 +1,266 @@
+/* =============================================================================
+ *
+ * Waybar configuration
+ *
+ * Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
+ *
+ * =========================================================================== */
+
+/* -----------------------------------------------------------------------------
+ * Keyframes
+ * -------------------------------------------------------------------------- */
+
+@keyframes blink-warning {
+    70% {
+        color: white;
+    }
+
+    to {
+        color: white;
+        background-color: orange;
+    }
+}
+
+@keyframes blink-critical {
+    70% {
+      color: white;
+    }
+
+    to {
+        color: white;
+        background-color: red;
+    }
+}
+
+
+/* -----------------------------------------------------------------------------
+ * Base styles
+ * -------------------------------------------------------------------------- */
+
+/* Reset all styles */
+* {
+    border: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+}
+/*
+   background-color: #0f3930;
+*/
+
+/* The whole bar */
+#waybar {
+   background: transparent;
+   color: white;
+   font-family: "SF Pro Display", Cantarell, Noto Sans, sans-serif;
+   font-size: 16px;
+   /* background-color: #0f3930; */
+}
+
+/* Each module */
+#battery,
+#clock,
+#cpu,
+#cpuinfo,
+#custom-keyboard-layout,
+#memory,
+#mode,
+#pulseaudio,
+#temperature,
+#backlight,
+#network,
+#tray {
+    /*
+    margin-left: 15px;
+    margin-right: 15px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-top:3px solid #be3638; 
+    */
+    background-color: #24283b;
+    padding: 0px 15px;
+    padding-top: 3px;
+    padding-bottom: 5px;
+    margin: 8px 0px 0px 0px;
+    /* border-radius: 9px 9px 0px 0px; */
+}
+
+/*
+*/
+
+/* -----------------------------------------------------------------------------
+ * Module styles
+ * -------------------------------------------------------------------------- */
+
+#battery {
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    color: #9ece6a;
+}
+
+#battery.warning {
+    color: orange;
+}
+
+#battery.critical {
+    color: red;
+}
+
+#battery.warning.discharging {
+    animation-name: blink-warning;
+    animation-duration: 3s;
+}
+
+#battery.critical.discharging {
+    animation-name: blink-critical;
+    animation-duration: 2s;
+}
+
+
+#backlight {
+    color: #b48ead;
+    border-radius: 0px 5px 5px 0px;
+    margin-right: 5px;
+}
+
+#clock {
+    /* font-weight: bold; */
+    border-radius: 5px;
+    color: #ddd;
+}
+
+#cpu {
+  /* No styles */
+    color: #ddd;
+}
+/*
+#cpu:after {
+  content:    "";
+  position:   absolute;
+  left:       0;
+  bottom:     -3px;
+  width:      100%;
+  height:     5px;
+  background: magenta;
+}
+*/
+
+#cpu.warning {
+    color: orange;
+}
+
+#cpu.critical {
+    color: red;
+}
+
+#memory {
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    color: #7dcfff;
+}
+
+#memory.warning {
+    color: orange;
+}
+
+#memory.critical {
+    color: red;
+    animation-name: blink-critical;
+    animation-duration: 2s;
+}
+
+#mode {
+    background-color: #24283b;
+    color: #ddd;
+    border-radius: 5px;
+    margin-left: 25px;
+    /* To compensate for the top border and still have vertical centering */
+    /*
+    padding-bottom: 2px;
+    border-top: 2px solid white;
+    */
+}
+
+#network {
+     color: #f7768e; 
+    /* color: #f65050; */
+    border-radius: 5px 0px 0px 5px;
+}
+
+#network.disconnected {
+    color: orange;
+}
+
+#pulseaudio {
+    /* No styles */
+    color: #e0af68;
+}
+
+#pulseaudio.muted {
+    /* No styles */
+}
+
+
+#temperature {
+    /* No styles */
+}
+
+#temperature.critical {
+    color: red;
+}
+
+#tray {
+    /* No styles */
+}
+
+#window {
+    font-weight: bold;
+}
+
+/*
+#workspaces button {
+    border-top: 2px solid transparent;
+    padding-bottom: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: #888888;
+}
+
+#workspaces button.focused {
+    color: white;
+    background-color: #f65050;
+    border-top: 5px solid #ffffff;
+}
+
+#workspaces button.urgent {
+    border-color: #c9545d;
+    color: #c9545d;
+} 
+*/
+#workspaces {
+	background-color: #24283b;
+	margin-top: 8px;
+	margin-left: 5px;
+	border-radius: 5px;
+}
+#workspaces button {
+    padding: 0px 15px;
+    color: #ddd;
+}
+
+#workspaces button.focused {
+    color: #24283b;
+    /* background-color: #7aa2f7; 
+    background-color: #f65050;
+     * */
+    background-color: #a13332;
+    border-radius: 5px;
+}
+
+#workspaces button:hover {
+	background-color: #7dcfff;
+	color: #24283b;
+	border-radius: 5px;
+}

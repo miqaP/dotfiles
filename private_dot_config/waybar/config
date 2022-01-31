@@ -1,0 +1,185 @@
+// =============================================================================
+//
+// Waybar configuration
+//
+// Configuration reference: https://github.com/Alexays/Waybar/wiki/Configuration
+//
+// =============================================================================
+
+{
+    // -------------------------------------------------------------------------
+    // Global configuration
+    // -------------------------------------------------------------------------
+
+    "layer": "top",
+
+    "position": "top",
+
+    "height": 20,
+
+    "modules-left": [
+        "sway/workspaces",
+        "sway/mode",
+    ],
+    "modules-center": [
+        //"sway/window"
+        "clock"
+    ],
+    "modules-right": [
+	"network",
+        "pulseaudio",
+        "memory",
+        "cpu",
+	//"custom/cpuinfo",
+        "temperature",
+        //"custom/keyboard-layout",
+        "battery",
+	"backlight",
+    ],
+
+
+    // -------------------------------------------------------------------------
+    // Modules
+    // -------------------------------------------------------------------------
+
+    "battery": {
+        "interval": 10,
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        // Connected to AC
+        "format": "  <span size='x-large'>{icon}</span>  {capacity}%", // Icon: bolt
+        // Not connected to AC
+        "format-discharging": "<span size='x-large'>{icon}</span>  {capacity}%",
+        "format-icons": [
+            "", // Icon: battery-full
+            "", // Icon: battery-three-quarters
+            "", // Icon: battery-half
+            "", // Icon: battery-quarter
+            ""  // Icon: battery-empty
+        ],
+        "tooltip": true,
+    },
+
+    "clock": {
+      "interval": 1,
+      "timezone": "Europe/Paris",
+      //"format": "{:%a. %b %e, %Y - %T}", // Icon: calendar-alt
+      "format": "{:%a. %b %e, %Y - %R}", // Icon: calendar-alt
+      "on-click": "gnome-calendar",
+      "tooltip-format": "<big>{:%Y %B}</big>\n<tt>{calendar}</tt>",
+      "max-length": 250,
+    },
+
+    "backlight": {
+    "device": "amdgpu_bl0",
+    "format": "{icon}  {percent}% ",
+    "format-icons": ["", "", "", ""]
+    },
+
+    "cpu": {
+        "interval": 1,
+        "format": "<span size='x-large'></span>  {usage}%", // Icon: microchip
+
+        "states": {
+          "warning": 70, "critical": 90
+        },
+	//"on-click": "swaymsg exec \"\\$term_float_landscape \\$cpu_mon\""
+    },
+
+
+
+    "custom/keyboard-layout": {
+      "exec": "swaymsg -t get_inputs | grep -m1 'xkb_active_layout_name' | cut -d '\"' -f4",
+      // Interval set only as a fallback, as the value is updated by signal
+      "interval": 30,
+      "format": "  {}", // Icon: keyboard
+      // Signal sent by Sway key binding (~/.config/sway/key-bindings)
+      "signal": 1, // SIGHUP
+      "tooltip": false
+    },
+
+
+    "memory": {
+        "interval": 1,
+        "format": "<span size='x-large'></span>  {}%", // Icon: memory
+        "states": {
+            "warning": 70,
+            "critical": 90
+        },
+	"on-click": "swaymsg exec \"\\$term_float_landscape \\$mem_mon\""
+    },
+
+    "network": {
+        "interval": 1,
+        "format-wifi": "<span size='x-large'></span>  {essid} ({signalStrength}%)", // Icon: wifi
+        "format-ethernet": "<span size='x-large'></span>  up", // Icon: ethernet
+        "format-disconnected": "<span size='x-large'>⚠</span>  Disconnected",
+        "tooltip-format": "{ifname}: {ipaddr} / {cidr}"
+    },
+
+    "sway/mode": {
+        "format": "<span size='small'>{}</span>", // Icon: expand-arrows-alt
+        "tooltip": false
+    },
+
+    "sway/window": {
+        "format": "{}",
+        "max-length": 120
+    },
+
+    "sway/workspaces": {
+        "all-outputs": false,
+        "disable-scroll": true,
+        "format": "{icon} {name}",
+        "format-icons": {
+            "1:www": "龜", // Icon: firefox-browser
+            "2:mail": "", // Icon: mail
+            "3:editor": "", // Icon: code
+            "4:terminals": "", // Icon: terminal
+            "5:portal": "", // Icon: terminal
+            "urgent": "",
+            "focused": "",
+            "default": ""
+        }
+    },
+
+       //"format": "{icon}</span>  {volume}%",
+    "pulseaudio": {
+       "scroll-step": 1,
+       "format": "<span size='x-large'>{icon}</span>  {volume}%",
+       "format-bluetooth": "<span size='x-large'>{icon}</span>  {volume}%",
+       "format-muted": "",
+       "format-icons": {
+           "headphones": "",
+           "handsfree": "",
+           "headset": "",
+           "phone": "",
+           "portable": "",
+           "car": "",
+           "default": ["", ""]
+       },
+       "on-click": "pavucontrol"
+    },
+
+    "temperature": {
+      "critical-threshold": 80,
+      "interval": 5,
+      "format": "{icon}  {temperatureC}°C",
+      "format-icons": [
+          "", // Icon: temperature-empty
+          "", // Icon: temperature-quarter
+          "", // Icon: temperature-half
+          "", // Icon: temperature-three-quarters
+          ""  // Icon: temperature-full
+      ],
+      "tooltip": true
+    },
+
+    "tray": {
+        "icon-size": 31,
+        "spacing": 10
+    }
+
+}
