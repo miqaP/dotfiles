@@ -34,7 +34,7 @@ set $menu bemenu-run -b --ignorecase --no-overlap --fn $uifont -p  "»" --tf "$p
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 #output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
-output * bg ~/background.jpg fill
+output * bg ~/.config/background/mountain-flat.jpg fill
 output eDP-1 scale 1.5
 #
 # Example configuration:

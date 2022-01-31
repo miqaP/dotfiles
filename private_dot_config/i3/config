@@ -271,4 +271,4 @@ bar {
         background $transparent
     }
 }
-exec_always --no-startup-id  feh --bg-scale ~/background.jpg
+exec_always --no-startup-id  feh --bg-scale ~/.config/background/mountain-flat.jpg
