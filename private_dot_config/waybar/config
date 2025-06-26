@@ -15,7 +15,7 @@
 
     "position": "top",
 
-    "height": 20,
+    "height": 14,
 
     "modules-left": [
         "sway/workspaces",
@@ -26,15 +26,15 @@
         "clock"
     ],
     "modules-right": [
-	"network",
-        "pulseaudio",
-        "memory",
-        "cpu",
-	//"custom/cpuinfo",
-        "temperature",
-        //"custom/keyboard-layout",
-        "battery",
-	"backlight",
+      "network",
+      "pulseaudio",
+      "memory",
+      "cpu",
+      //"custom/cpuinfo",
+      "temperature",
+      //"custom/keyboard-layout",
+      "battery",
+      "backlight",
     ],
 
 
@@ -178,8 +178,8 @@
     },
 
     "tray": {
-        "icon-size": 31,
-        "spacing": 10
+        "icon-size": 16,
+        "spacing": 4
     }
 
 }

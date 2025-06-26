@@ -3,15 +3,17 @@
 # Copy this to ~/.config/sway/config and edit it to your liking.
 #
 # Read `man 5 sway` for a complete reference.
-default_border pixel 2
-titlebar_border_thickness 2
-gaps outer 5
-gaps inner 5
+default_border pixel 0
+titlebar_border_thickness 0
+gaps outer 0
+gaps inner 0
+
 
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
 set $mod Mod4
+set $alt Mod1
 # Home row direction keys, like vim
 set $left h
 set $down j
@@ -23,6 +25,7 @@ set $term alacritty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
+font pango: SF Pro Display 8
 set $uifont "SF Pro Display 12"
 set $highlight #3daee9
 set $prompt #a13332
@@ -35,6 +38,7 @@ set $menu bemenu-run -b --ignorecase --no-overlap --fn $uifont -p  "»" --tf "$p
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 #output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 output * bg ~/.config/background/mountain-flat.jpg fill
+
 output eDP-1 scale 1.5
 #
 # Example configuration:
@@ -76,13 +80,7 @@ input * {
 
 # Set font
 #font pango: Taskbar, Cantarell 9
-font pango: SF Pro Display 11
 seat * hide_cursor 10000
-
-# Gaps
-#gaps inner 5
-#gaps outer 0
-#smart_gaps on
 
 # Borders
 #default_border none
@@ -94,37 +92,16 @@ mouse_warping none
 focus_follows_mouse no
 
 # Workspaces
-#workspace_layout tabbed
+# workspace_layout tabbed
 workspace_layout default
 default_orientation auto
 #layout splitv
 
-set $workspace1 workspace number 1
-set $workspace2 workspace number 2
-set $workspace3 workspace number 3
-set $workspace4 workspace number 4
-set $workspace5 workspace number 5
-set $workspace6 workspace number 6
-set $workspace7 workspace number 7
-set $workspace8 workspace number 8
-set $workspace9 workspace number 9
-set $workspace0 workspace number 10
 
 # Specific window configuration
 for_window    [app_id=".*"]                              sticky enable
 for_window    [window_role="pop-up"]                     floating enable
 for_window    [app_id="udiskie"]                         floating enable
-#for_window    [app_id="org.qutebrowser.qutebrowser"]     move container to $workspace2
-#for_window    [app_id="Signal"]                          move container to $workspace3
-#for_window    [app_id="neomutt"]                         move container to $workspace4, title_format "NeoMutt"
-#for_window    [app_id="dmenu.*"]                         floating enable, resize set width 60ppt height 80ppt
-#for_window    [app_id="dmenu-browser"]                   resize set height 20ppt
-#for_window    [app_id="dmenu-emoji"]                     resize set height 20ppt
-#for_window    [app_id="qalculate-gtk"]                   floating enable
-#for_window    [app_id="mpv"]                             floating enable, resize set width 531 height 300, move position 1345 125
-#for_window    [app_id="iriunwebcam"]                     floating disable
-
-assign [app_id="thunderbird"]  $workspace1
 
 # Color scheme (Gruvbox dark)
 set $color_normal_white  #a89984
@@ -142,14 +119,30 @@ client.unfocused          $color_normal_gray     $color_normal_gray     $color_n
 client.urgent             $color_bright_yellow   $color_bright_yellow   $color_normal_black    $color_unused        $color_unused
 client.placeholder        $color_unused          $color_unused          $color_unused          $color_unused        $color_unused
 
+# Configure idle and lock timeout
+set $lock_cmd swaylock \
+--daemonize \
+--screenshots \
+--clock \
+--indicator \
+--effect-vignette 0.5:0.5 \
+--effect-blur 7x5 \
+--ring-color 3B4252 \
+--key-hl-color 880033
+
+exec swayidle -w \
+  timeout 300 'swaymsg "output * dpms off"' \
+  resume 'swaymsg "output * dpms on"' \
+  timeout 600 "$lock_cmd" \
+  before-sleep "$lock_cmd"
+
 set $mode_system (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown, (b) off-screen
 
-
 mode "$mode_system" {
-    bindsym l exec --no-startup-id swaylock, mode "default"
+    bindsym l exec --no-startup-id $lock_cmd, mode "default"
     bindsym e exec --no-startup-id swaymsg exit, mode "default"
-    bindsym s exec --no-startup-id swaylock -f && systemctl suspend, mode "default"
-    bindsym h exec --no-startup-id swaylock -f && systemctl hibernate, mode "default"
+    bindsym s exec --no-startup-id $lock_cmd && systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id $lock_cmd && systemctl hibernate, mode "default"
     bindsym r exec --no-startup-id systemctl reboot -i, mode "default"
     bindsym b exec sleep 1 && xset dpms force off, mode "default"
     bindsym Shift+s exec --no-startup-id systemctl poweroff -i, mode "default"
@@ -170,38 +163,46 @@ bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
-#bindsym XF86Search exec bemenu-run
-### Key bindings
-#
-# Basics:
-#
-    # Start a terminal
-    bindsym $mod+Return exec $term
 
-    # Kill focused window
-    bindsym $mod+w kill
 
-    # Start your launcher
-    bindsym $mod+d exec $menu
-    bindsym $mod+Shift+s exec thunderbird
+bindsym $mod+w kill
 
-    # Drag floating windows by holding down $mod and left mouse button.
-    # Resize them with right mouse button + $mod.
-    # Despite the name, also works for non-floating windows.
-    # Change normal to inverse to use left mouse button for resizing and right
-    # mouse button for dragging.
-    floating_modifier $mod normal
+# Reload the configuration file
+bindsym $mod+Shift+c reload
 
-    # Reload the configuration file
-    bindsym $mod+Shift+c reload
+# Doesnt seem to work
+bindsym $mod+Shift+r restart
 
-    bindsym $mod+Shift+t exec $term
-    bindsym $mod+Shift+e exec nautilus
-    bindsym $mod+Shift+w exec firefox
+bindsym $mod+Shift+t exec $term
+bindsym $mod+Shift+e exec nautilus
+bindsym $mod+Shift+w exec firefox
+bindsym $mod+Shift+s exec thunderbird
+bindsym $mod+Shift+d exec emacs
+# Force obsidian to use wayland
+bindsym $mod+Shift+f exec OBSIDIAN_USE_WAYLAND=1 obsidian --ozone-platform-hint=auto
+bindsym $mod+semicolon exec rofimoji
 
-    # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
-    #bindsym $mod+Shift+x exec wlogout -p layer-shell
+# This is not working under Wayland
+    # take a screenshot of a whole window and copy it to a clipboard
+    #bindsym --release Print exec "$HOME/.local/bin/scregcp.py $HOME/Pictures/screenshots/"
+    # take a screenshot of a screen region and copy it to a clipboard
+    #bindsym --release Shift+Print exec "$HOME/.local/bin/scregcp.py -s $HOME/Pictures/screenshots/"
+bindsym --release Print exec grim ~/Pictures/screenshots/$(date +'%Y%m%d-%H_%M_%S').png
+bindsym --release Shift+Print exec slurp | grim -g - - | tee ~/Pictures/screenshots/$(date +'%Y%m%d-%H_%M_%S').png | wl-copy
+
+bindsym $mod+d exec $menu
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
+
+
+
+# Exit sway (logs you out of your Wayland session)
+bindsym $mod+Shift+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+#bindsym $mod+Shift+x exec wlogout -p layer-shell
 #
 # Moving around:
 #
@@ -229,30 +230,73 @@ bindsym XF86AudioPrev exec playerctl previous
 #
 # Workspaces:
 #
-    # Switch to workspace
-    bindsym $mod+ampersand workspace number 1
-    bindsym $mod+eacute workspace number 2
-    bindsym $mod+quotedbl workspace number 3
-    bindsym $mod+apostrophe workspace number 4
-    bindsym $mod+parenleft workspace number 5
-    bindsym $mod+minus workspace number 6
-    bindsym $mod+egrave workspace number 7
-    bindsym $mod+underscore workspace number 8
-    bindsym $mod+ccedilla workspace number 9
-    bindsym $mod+agrave workspace number 10
-    # Move focused container to workspace
-    bindsym $mod+Shift+ampersand move container to workspace number 1
-    bindsym $mod+Shift+eacute move container to workspace number 2
-    bindsym $mod+Shift+quotedbl move container to workspace number 3
-    bindsym $mod+Shift+apostrophe move container to workspace number 4
-    bindsym $mod+Shift+parenleft move container to workspace number 5
-    bindsym $mod+Shift+minus move container to workspace number 6
-    bindsym $mod+Shift+egrave move container to workspace number 7
-    bindsym $mod+Shift+underscore move container to workspace number 8
-    bindsym $mod+Shift+ccedilla move container to workspace number 9
-    bindsym $mod+Shift+agrave move container to workspace number 10
-    # Note: workspaces can have any name you want, not just numbers.
-    # We just use 1-10 as the default.
+    set $ws1 "1"
+    set $ws2 "2"
+    set $ws3 "3"
+    set $ws4 "4"
+    set $ws5 "5"
+    set $ws6 "6"
+    set $ws7 "7"
+    set $ws8 "8"
+    set $ws9 "9"
+    set $ws10 "10"
+    set $altws1 "1:a1"
+    set $altws2 "2:a2"
+    set $altws3 "3:a3"
+    set $altws4 "4:a4"
+    set $altws5 "5:a5"
+    set $altws6 "6:a6"
+    set $altws7 "7:a7"
+    set $altws8 "8:a8"
+    set $altws9 "9:a9"
+    set $altws10 "10:a10"
+
+    # switch to workspace
+    bindsym $mod+ampersand workspace $ws1
+    bindsym $mod+eacute workspace $ws2
+    bindsym $mod+quotedbl workspace $ws3
+    bindsym $mod+apostrophe workspace $ws4
+    bindsym $mod+parenleft workspace $ws5
+    bindsym $mod+minus workspace $ws6
+    bindsym $mod+egrave workspace $ws7
+    bindsym $mod+underscore workspace $ws8
+    bindsym $mod+ccedilla workspace $ws9
+    bindsym $mod+agrave workspace $ws10
+
+    bindsym $alt+ampersand workspace $altws1
+    bindsym $alt+eacute workspace $altws2
+    bindsym $alt+quotedbl workspace $altws3
+    bindsym $alt+apostrophe workspace $altws4
+    bindsym $alt+parenleft workspace $altws5
+    bindsym $alt+minus workspace $altws6
+    bindsym $alt+egrave workspace $altws7
+    bindsym $alt+underscore workspace $altws8
+    bindsym $alt+ccedilla workspace $altws9
+    bindsym $alt+agrave workspace $altws10
+
+    # Move focused container to workspace (MOD+Shift)
+    bindsym $mod+Shift+ampersand move container to workspace $ws1
+    bindsym $mod+Shift+eacute move container to workspace $ws2
+    bindsym $mod+Shift+quotedbl move container to workspace $ws3
+    bindsym $mod+Shift+apostrophe move container to workspace $ws4
+    bindsym $mod+Shift+parenleft move container to workspace $ws5
+    bindsym $mod+Shift+minus move container to workspace $ws6
+    bindsym $mod+Shift+egrave move container to workspace $ws7
+    bindsym $mod+Shift+underscore move container to workspace $ws8
+    bindsym $mod+Shift+ccedilla move container to workspace $ws9
+    bindsym $mod+Shift+agrave move container to workspace $ws10
+
+    # Move focused container to alt workspace (ALT+Shift)
+    bindsym $alt+Shift+ampersand move container to workspace $altws1
+    bindsym $alt+Shift+eacute move container to workspace $altws2
+    bindsym $alt+Shift+quotedbl move container to workspace $altws3
+    bindsym $alt+Shift+apostrophe move container to workspace $altws4
+    bindsym $alt+Shift+parenleft move container to workspace $altws5
+    bindsym $alt+Shift+minus move container to workspace $altws6
+    bindsym $alt+Shift+egrave move container to workspace $altws7
+    bindsym $alt+Shift+underscore move container to workspace $altws8
+    bindsym $alt+Shift+ccedilla move container to workspace $altws9
+    bindsym $alt+Shift+agrave move container to workspace $altws10
 #
 # Layout stuff:
 #
@@ -268,7 +312,7 @@ bindsym XF86AudioPrev exec playerctl previous
     #bindsym $mod+e layout toggle split
 
     # Make the current focus fullscreen
-    bindsym $mod+shift+f fullscreen
+    bindsym $mod+f fullscreen
 
     # Toggle the current focus between tiling and floating mode
     bindsym $mod+Shift+space floating toggle
@@ -294,10 +338,6 @@ bindsym XF86AudioPrev exec playerctl previous
 # Resizing containers:
 #
 mode "resize" {
-    # left will shrink the containers width
-    # right will grow the containers width
-    # up will shrink the containers height
-    # down will grow the containers height
     bindsym $left resize shrink width 10px
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
@@ -316,6 +356,47 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 bindsym $mod+Shift+x mode "$mode_system"
+
+
+
+# Screen variables (replaced by script)
+set $iscreen eDP-1
+set $escreen HDMI-A-1 
+
+workspace $ws1 output $iscreen
+workspace $ws2 output $iscreen
+workspace $ws3 output $iscreen
+workspace $ws4 output $iscreen
+workspace $ws5 output $iscreen
+workspace $ws6 output $iscreen
+workspace $ws7 output $iscreen
+workspace $ws8 output $iscreen
+workspace $ws9 output $iscreen
+workspace $ws10 output $iscreen
+
+workspace $altws1 output $escreen
+workspace $altws2 output $escreen
+workspace $altws3 output $escreen
+workspace $altws4 output $escreen
+workspace $altws5 output $escreen
+workspace $altws6 output $escreen
+workspace $altws7 output $escreen
+workspace $altws8 output $escreen
+workspace $altws9 output $escreen
+workspace $altws10 output $escreen
+
+set $screens_layout Config screens layout - Standalone HiDPI (s) - Dual screen 1080p (w)
+mode "$screens_layout" {
+    bindsym w exec swaymsg output $escreen enable; mode "default"
+    bindsym s exec swaymsg output $escreen disable; mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+shift+p mode "default"
+}
+bindsym $mod+Shift+p mode "$screens_layout"
+
 
 #
 # Status Bar:

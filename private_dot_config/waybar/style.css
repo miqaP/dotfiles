@@ -49,12 +49,15 @@
 */
 
 /* The whole bar */
-#waybar {
+window#waybar {
    background: transparent;
    color: white;
    font-family: "SF Pro Display", Cantarell, Noto Sans, sans-serif;
-   font-size: 16px;
-   /* background-color: #0f3930; */
+   font-size: 14px;
+}
+window#waybar>box {
+   padding-left: 0px;
+   padding-right: 0px;
 }
 
 /* Each module */
@@ -70,19 +73,12 @@
 #backlight,
 #network,
 #tray {
-    /*
-    margin-left: 15px;
-    margin-right: 15px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-top:3px solid #be3638; 
-    */
     background-color: #24283b;
-    padding: 0px 15px;
-    padding-top: 3px;
-    padding-bottom: 5px;
-    margin: 8px 0px 0px 0px;
-    /* border-radius: 9px 9px 0px 0px; */
+    padding-right: 5px;
+    padding-left: 15px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin: 0px 0px 0px 0px;
 }
 
 /*
@@ -120,13 +116,13 @@
 
 #backlight {
     color: #b48ead;
-    border-radius: 0px 5px 5px 0px;
-    margin-right: 5px;
+    border-radius: 0px 0px 0px 0px;
+    margin-right: 0px;
 }
 
 #clock {
     /* font-weight: bold; */
-    border-radius: 5px;
+    border-radius: 0px 0px 5px 5px;
     color: #ddd;
 }
 
@@ -177,16 +173,12 @@
     border-radius: 5px;
     margin-left: 25px;
     /* To compensate for the top border and still have vertical centering */
-    /*
-    padding-bottom: 2px;
-    border-top: 2px solid white;
-    */
 }
 
 #network {
      color: #f7768e; 
     /* color: #f65050; */
-    border-radius: 5px 0px 0px 5px;
+    border-radius: 0px 0px 0px 5px;
 }
 
 #network.disconnected {
@@ -219,31 +211,10 @@
     font-weight: bold;
 }
 
-/*
-#workspaces button {
-    border-top: 2px solid transparent;
-    padding-bottom: 2px;
-    padding-left: 10px;
-    padding-right: 10px;
-    color: #888888;
-}
-
-#workspaces button.focused {
-    color: white;
-    background-color: #f65050;
-    border-top: 5px solid #ffffff;
-}
-
-#workspaces button.urgent {
-    border-color: #c9545d;
-    color: #c9545d;
-} 
-*/
 #workspaces {
-	background-color: #24283b;
-	margin-top: 8px;
-	margin-left: 5px;
-	border-radius: 5px;
+    background-color: #24283b;
+    margin-top: 0px;
+    border-radius: 0px 0px 5px 0px;
 }
 #workspaces button {
     padding: 0px 15px;
@@ -252,15 +223,12 @@
 
 #workspaces button.focused {
     color: #24283b;
-    /* background-color: #7aa2f7; 
-    background-color: #f65050;
-     * */
     background-color: #a13332;
-    border-radius: 5px;
+    border-radius: 5px 0px 5px 5px;
 }
 
 #workspaces button:hover {
-	background-color: #7dcfff;
-	color: #24283b;
-	border-radius: 5px;
+    background-color: #7dcfff;
+    color: #24283b;
+    border-radius: 5px 0px 5px 5px;
 }
